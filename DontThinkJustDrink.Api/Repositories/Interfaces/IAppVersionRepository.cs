@@ -1,4 +1,4 @@
-﻿using DontThinkJustDrink.Api.Entities;
+﻿using DontThinkJustDrink.Api.Models;
 using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Repositories.Interfaces

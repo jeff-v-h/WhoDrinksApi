@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace DontThinkJustDrink.Api.Entities
+namespace DontThinkJustDrink.Api.Models
 {
     public class AppVersion
     {

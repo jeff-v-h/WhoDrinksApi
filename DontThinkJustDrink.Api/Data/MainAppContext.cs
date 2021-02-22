@@ -1,5 +1,5 @@
 ﻿using DontThinkJustDrink.Api.Data.Interfaces;
-using DontThinkJustDrink.Api.Entities;
+using DontThinkJustDrink.Api.Models;
 using DontThinkJustDrink.Api.Settings;
 using MongoDB.Driver;
 
@@ -12,7 +12,7 @@ namespace DontThinkJustDrink.Api.Data
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
-            AppVersions = database.GetCollection<AppVersion>(settings.CollectionName);
+            AppVersions = database.GetCollection<AppVersion>(settings.AppVersionCollectionName);
         }
 
         public IMongoCollection<AppVersion> AppVersions { get; }

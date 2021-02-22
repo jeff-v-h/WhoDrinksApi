@@ -1,4 +1,4 @@
-﻿using DontThinkJustDrink.Api.Entities;
+﻿using DontThinkJustDrink.Api.Models;
 using MongoDB.Driver;
 
 namespace DontThinkJustDrink.Api.Data.Interfaces
