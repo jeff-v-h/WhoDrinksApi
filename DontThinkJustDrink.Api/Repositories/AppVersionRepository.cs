@@ -15,7 +15,7 @@ namespace DontThinkJustDrink.Api.Repositories
             _context = context;
         }
 
-        public async Task<AppVersion> GetDetails(string version)
+        public async Task<Versioning> GetDetails(string version)
         {
             return await _context.AppVersions.Find(v => v.Version == version).FirstOrDefaultAsync();
         }

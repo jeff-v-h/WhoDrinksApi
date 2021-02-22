@@ -5,6 +5,6 @@ namespace DontThinkJustDrink.Api.Data.Interfaces
 {
     public interface IMainAppContext
     {
-        IMongoCollection<AppVersion> AppVersions { get; }
+        IMongoCollection<Versioning> AppVersions { get; }
     }
 }

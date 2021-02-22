@@ -1,16 +1,15 @@
+using DontThinkJustDrink.Api.Data;
+using DontThinkJustDrink.Api.Data.Interfaces;
+using DontThinkJustDrink.Api.Repositories;
+using DontThinkJustDrink.Api.Repositories.Interfaces;
+using DontThinkJustDrink.Api.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api
 {
@@ -26,8 +25,25 @@ namespace DontThinkJustDrink.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
+
+            #region Configuration Dependencies
+
+            services.Configure<MainAppDatabaseSettings>(
+                Configuration.GetSection(nameof(MainAppDatabaseSettings)));
+
+            services.AddSingleton<IMainAppDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<MainAppDatabaseSettings>>().Value);
+
+            #endregion
+
+            #region Project Dependencies
+
+            services.AddTransient<IMainAppContext, MainAppContext>();
+            services.AddTransient<IAppVersionRepository, AppVersionRepository>();
+
+            #endregion
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DontThinkJustDrink.Api", Version = "v1" });
