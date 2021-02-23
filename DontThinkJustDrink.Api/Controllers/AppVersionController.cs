@@ -20,7 +20,7 @@ namespace DontThinkJustDrink.Api.Controllers
         }
 
         [HttpGet("{version}")]
-        public async Task<Versioning> Get(string version)
+        public async Task<AppVersion> Get(string version)
         {
             return await _appVersionRepo.GetDetails(version);
         }

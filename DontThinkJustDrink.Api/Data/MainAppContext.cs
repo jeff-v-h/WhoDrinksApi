@@ -12,9 +12,9 @@ namespace DontThinkJustDrink.Api.Data
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
-            AppVersions = database.GetCollection<Versioning>(settings.AppVersionCollectionName);
+            AppVersions = database.GetCollection<AppVersion>(settings.AppVersionCollectionName);
         }
 
-        public IMongoCollection<Versioning> AppVersions { get; }
+        public IMongoCollection<AppVersion> AppVersions { get; }
     }
 }

@@ -5,6 +5,6 @@ namespace DontThinkJustDrink.Api.Repositories.Interfaces
 {
     public interface IAppVersionRepository
     {
-        Task<Versioning> GetDetails(string version);
+        Task<AppVersion> GetDetails(string version);
     }
 }

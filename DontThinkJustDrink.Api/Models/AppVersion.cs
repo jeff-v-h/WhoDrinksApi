@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace DontThinkJustDrink.Api.Models
 {
-    public class Versioning
+    public class AppVersion
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
