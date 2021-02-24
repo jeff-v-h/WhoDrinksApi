@@ -2,6 +2,7 @@
 using DontThinkJustDrink.Api.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Controllers
@@ -20,9 +21,19 @@ namespace DontThinkJustDrink.Api.Controllers
         }
 
         [HttpGet("{version}")]
-        public async Task<AppVersion> Get(string version)
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(AppVersion), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<AppVersion>> GetAppVersion(string version)
         {
-            return await _appVersionRepo.GetDetails(version);
+            var versionDetails = await _appVersionRepo.GetDetails(version);
+
+            if (versionDetails == null)
+            {
+                _logger.LogError($"Details for app version {version} could not be found in database.");
+                return NotFound();
+            }
+
+            return Ok(versionDetails);
         }
     }
 }
