@@ -13,8 +13,10 @@ namespace DontThinkJustDrink.Api.Data
             var database = client.GetDatabase(settings.DatabaseName);
 
             AppVersions = database.GetCollection<AppVersion>(settings.AppVersionCollectionName);
+            UserFeedback = database.GetCollection<UserFeedback>(settings.UserFeedbackCollectionName);
         }
 
         public IMongoCollection<AppVersion> AppVersions { get; }
+        public IMongoCollection<UserFeedback> UserFeedback { get; }
     }
 }
