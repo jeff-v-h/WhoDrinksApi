@@ -13,10 +13,14 @@ namespace DontThinkJustDrink.Api.Data
             var database = client.GetDatabase(settings.DatabaseName);
 
             AppVersions = database.GetCollection<AppVersion>(settings.AppVersionCollectionName);
-            UserFeedback = database.GetCollection<UserFeedback>(settings.UserFeedbackCollectionName);
+            UsersFeedback = database.GetCollection<UserFeedback>(settings.UserFeedbackCollectionName);
+            Users = database.GetCollection<User>(settings.UsersCollectionName);
+            UsersCredentials = database.GetCollection<UserCredentials>(settings.UserCredentialsCollectionName);
         }
 
         public IMongoCollection<AppVersion> AppVersions { get; }
-        public IMongoCollection<UserFeedback> UserFeedback { get; }
+        public IMongoCollection<UserFeedback> UsersFeedback { get; }
+        public IMongoCollection<User> Users { get; }
+        public IMongoCollection<UserCredentials> UsersCredentials { get; }
     }
 }

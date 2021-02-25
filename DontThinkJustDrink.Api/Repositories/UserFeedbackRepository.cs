@@ -16,7 +16,7 @@ namespace DontThinkJustDrink.Api.Repositories
 
         public async Task Create(UserFeedback feedback)
         {
-            await _context.UserFeedback.InsertOneAsync(feedback);
+            await _context.UsersFeedback.InsertOneAsync(feedback);
         }
     }
 }

@@ -6,5 +6,7 @@
         string DatabaseName { get; set; }
         string AppVersionCollectionName { get; set; }
         string UserFeedbackCollectionName { get; set; }
+        string UsersCollectionName { get; set; }
+        string UserCredentialsCollectionName { get; set; }
     }
 }
