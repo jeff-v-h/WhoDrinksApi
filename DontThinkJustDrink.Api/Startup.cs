@@ -1,5 +1,7 @@
 using DontThinkJustDrink.Api.Data;
 using DontThinkJustDrink.Api.Data.Interfaces;
+using DontThinkJustDrink.Api.Managers;
+using DontThinkJustDrink.Api.Managers.Interfaces;
 using DontThinkJustDrink.Api.Repositories;
 using DontThinkJustDrink.Api.Repositories.Interfaces;
 using DontThinkJustDrink.Api.Settings;
@@ -41,6 +43,8 @@ namespace DontThinkJustDrink.Api
 
             services.AddTransient<IMainAppContext, MainAppContext>();
             services.AddTransient<IAppVersionRepository, AppVersionRepository>();
+            services.AddTransient<IUserFeedbackRepository, UserFeedbackRepository>();
+            services.AddTransient<IUserFeedbackManager, UserFeedbackManager>();
 
             #endregion
 

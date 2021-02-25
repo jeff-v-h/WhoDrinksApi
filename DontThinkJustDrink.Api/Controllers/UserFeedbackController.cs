@@ -1,5 +1,5 @@
-﻿using DontThinkJustDrink.Api.Models;
-using DontThinkJustDrink.Api.Repositories.Interfaces;
+﻿using DontThinkJustDrink.Api.Managers.Interfaces;
+using DontThinkJustDrink.Api.Models.RequestModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
@@ -10,19 +10,18 @@ namespace DontThinkJustDrink.Api.Controllers
     [Route("api/[controller]")]
     public class UserFeedbackController : ControllerBase
     {
-        private readonly IUserFeedbackRepository _feedbackRepo;
+        private readonly IUserFeedbackManager _feedbackManager;
 
-        public UserFeedbackController(IUserFeedbackRepository feedbackRepo)
+        public UserFeedbackController(IUserFeedbackManager feedbackManager)
         {
-            _feedbackRepo = feedbackRepo;
+            _feedbackManager = feedbackManager;
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(UserFeedback), (int)HttpStatusCode.Accepted)]
-        public async Task<ActionResult<UserFeedback>> Create([FromBody] UserFeedback feedback)
+        [ProducesResponseType((int)HttpStatusCode.Accepted)]
+        public async Task<ActionResult> Create([FromBody] UserFeedbackRequest request)
         {
-            await _feedbackRepo.Create(feedback);
-
+            await _feedbackManager.Create(request);
             return Accepted();
         }
     }
