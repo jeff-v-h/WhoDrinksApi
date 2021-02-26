@@ -5,6 +5,6 @@ namespace DontThinkJustDrink.Api.Repositories.Interfaces
 {
     public interface IUserAuthRepository
     {
-        Task CreateUser(User user, UserCredentials credentials);
+        Task<bool> CreateUser(User user, UserCredentials credentials);
     }
 }

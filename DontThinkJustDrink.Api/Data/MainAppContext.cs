@@ -18,6 +18,7 @@ namespace DontThinkJustDrink.Api.Data
             UsersCredentials = database.GetCollection<UserCredentials>(settings.UserCredentialsCollectionName);
         }
 
+        public MongoClient MongoClient { get; }
         public IMongoCollection<AppVersion> AppVersions { get; }
         public IMongoCollection<UserFeedback> UsersFeedback { get; }
         public IMongoCollection<User> Users { get; }
