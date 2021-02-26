@@ -28,13 +28,10 @@ namespace DontThinkJustDrink.Api.Managers
                 LastName = request.LastName
             };
 
-            (var salt, var hashed) = _passwordHelper.GetPasswordSaltAndHash(request.Password);
-
             var credentials = new UserCredentials
             {
                 Email = request.Email,
-                Salt = salt,
-                Hashed = hashed
+                Hashed = _passwordHelper.Hash(request.Password)
             };
 
             return _authRepo.CreateUser(user, credentials);
