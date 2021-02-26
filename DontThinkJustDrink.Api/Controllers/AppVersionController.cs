@@ -1,5 +1,5 @@
-﻿using DontThinkJustDrink.Api.Models;
-using DontThinkJustDrink.Api.Repositories.Interfaces;
+﻿using DontThinkJustDrink.Api.Managers.Interfaces;
+using DontThinkJustDrink.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net;
@@ -11,12 +11,12 @@ namespace DontThinkJustDrink.Api.Controllers
     [Route("api/[controller]")]
     public class AppVersionController : ControllerBase
     {
-        private readonly IAppVersionRepository _appVersionRepo;
+        private readonly IAppVersionManager _appVersionManager;
         private readonly ILogger<AppVersionController> _logger;
 
-        public AppVersionController(IAppVersionRepository appVersionRepo, ILogger<AppVersionController> logger)
+        public AppVersionController(IAppVersionManager appVersionManager, ILogger<AppVersionController> logger)
         {
-            _appVersionRepo = appVersionRepo;
+            _appVersionManager = appVersionManager;
             _logger = logger;
         }
 
@@ -25,7 +25,7 @@ namespace DontThinkJustDrink.Api.Controllers
         [ProducesResponseType(typeof(AppVersion), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<AppVersion>> GetAppVersion(string version)
         {
-            var versionDetails = await _appVersionRepo.GetDetails(version);
+            var versionDetails = await _appVersionManager.GetDetails(version);
 
             if (versionDetails == null)
             {

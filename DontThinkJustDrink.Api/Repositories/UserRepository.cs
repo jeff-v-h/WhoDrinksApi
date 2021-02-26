@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Repositories
 {
-    public class UserAuthRepository : IUserAuthRepository
+    public class UserRepository : IUserRepository
     {
         private readonly IMainAppContext _context;
-        private readonly ILogger<UserAuthRepository> _logger;
+        private readonly ILogger<UserRepository> _logger;
 
-        public UserAuthRepository(IMainAppContext context, ILogger<UserAuthRepository> logger)
+        public UserRepository(IMainAppContext context, ILogger<UserRepository> logger)
         {
             _context = context;
             _logger = logger;

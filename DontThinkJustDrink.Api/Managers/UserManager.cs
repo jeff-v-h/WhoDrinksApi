@@ -9,12 +9,12 @@ namespace DontThinkJustDrink.Api.Managers
 {
     public class UserManager : IUserManager
     {
-        private readonly IUserAuthRepository _authRepo;
+        private readonly IUserRepository _userRepo;
         private readonly IPasswordHelper _passwordHelper;
 
-        public UserManager(IUserAuthRepository authRepo, IPasswordHelper passwordHelper)
+        public UserManager(IUserRepository authRepo, IPasswordHelper passwordHelper)
         {
-            _authRepo = authRepo;
+            _userRepo = authRepo;
             _passwordHelper = passwordHelper;
         }
 
@@ -34,7 +34,7 @@ namespace DontThinkJustDrink.Api.Managers
                 Hashed = _passwordHelper.Hash(request.Password)
             };
 
-            return _authRepo.CreateUser(user, credentials);
+            return _userRepo.CreateUser(user, credentials);
         }
     }
 }
