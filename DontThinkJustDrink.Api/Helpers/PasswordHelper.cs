@@ -11,7 +11,7 @@ namespace DontThinkJustDrink.Api.Helpers
             var saltAsBytes = GenerateRandomSaltBytes();
             var salt = Convert.ToBase64String(saltAsBytes);
             var hashed = DeriveHash(pw, saltAsBytes, 10000);
-            return $"{salt.Substring(0, 8)}{hashed}{salt.Substring(8)}";
+            return $"{salt.Substring(0, 8)}{hashed}.{salt.Substring(8)}";
         }
 
         private byte[] GenerateRandomSaltBytes()

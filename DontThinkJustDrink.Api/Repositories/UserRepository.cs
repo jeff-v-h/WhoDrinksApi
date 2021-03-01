@@ -1,8 +1,11 @@
 ﻿using DontThinkJustDrink.Api.Data.Interfaces;
 using DontThinkJustDrink.Api.Models;
+using DontThinkJustDrink.Api.Models.Exceptions;
 using DontThinkJustDrink.Api.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Repositories
@@ -18,9 +21,9 @@ namespace DontThinkJustDrink.Api.Repositories
             _logger = logger;
         }
 
-        public async Task<bool> CreateUser(User user, UserCredentials credentials)
+        public async Task CreateUser(User user, UserCredentials credentials)
         {
-            using var session = await _context.MongoClient.StartSessionAsync();
+            using var session = await _context.StartSessionAsync();
             session.StartTransaction();
 
             try {
@@ -29,12 +32,25 @@ namespace DontThinkJustDrink.Api.Repositories
                 await _context.UsersCredentials.InsertOneAsync(session, credentials);
 
                 await session.CommitTransactionAsync();
-                return true;
-            } catch (Exception e) {
-                _logger.LogError(e, $"Unable to complete creation of user with auth for email: {user.Email}; full name: {user.FirstName} {user.LastName}");
+            } catch (MongoWriteException mwe) when (IsDuplicateEmailError(mwe)) {
+                _logger.LogError(mwe, $"Unable to complete creation of user with auth for email: {user.Email}; full name: {user.FirstName} {user.LastName}");
                 await session.AbortTransactionAsync();
+                throw new DuplicateEmailException();
+            }
+        }
+
+        private bool IsDuplicateEmailError(MongoWriteException ex)
+        {
+            var writeError = (ex.InnerException as MongoBulkWriteException)?.WriteErrors.FirstOrDefault();
+            if (writeError == null) {
                 return false;
             }
+
+            if (writeError.Code != 11000 || writeError.Category != ServerErrorCategory.DuplicateKey) {
+                return false;
+            }
+
+            return writeError.Message.Contains("Email:");
         }
     }
 }

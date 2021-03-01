@@ -5,6 +5,6 @@ namespace DontThinkJustDrink.Api.Managers.Interfaces
 {
     public interface IUserManager
     {
-        Task<bool> SignUpUser(SignUpRequest request);
+        Task SignUpUser(SignUpRequest request);
     }
 }

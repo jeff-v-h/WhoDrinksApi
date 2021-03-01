@@ -2,26 +2,29 @@
 using DontThinkJustDrink.Api.Models;
 using DontThinkJustDrink.Api.Settings;
 using MongoDB.Driver;
+using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Data
 {
     public class MainAppContext : IMainAppContext
     {
-        public MainAppContext(IMainAppDatabaseSettings settings)
-        {
-            var client = new MongoClient(settings.ConnectionString);
-            var database = client.GetDatabase(settings.DatabaseName);
-
-            AppVersions = database.GetCollection<AppVersion>(settings.AppVersionCollectionName);
-            UsersFeedback = database.GetCollection<UserFeedback>(settings.UserFeedbackCollectionName);
-            Users = database.GetCollection<User>(settings.UsersCollectionName);
-            UsersCredentials = database.GetCollection<UserCredentials>(settings.UserCredentialsCollectionName);
-        }
-
-        public MongoClient MongoClient { get; }
         public IMongoCollection<AppVersion> AppVersions { get; }
         public IMongoCollection<UserFeedback> UsersFeedback { get; }
         public IMongoCollection<User> Users { get; }
         public IMongoCollection<UserCredentials> UsersCredentials { get; }
+        private MongoClient _mongoClient { get; }
+
+        public MainAppContext(IMainAppDatabaseSettings settings)
+        {
+            _mongoClient = new MongoClient(settings.ConnectionString);
+            var database = _mongoClient.GetDatabase(settings.DatabaseName);
+
+            AppVersions = database.GetCollection<AppVersion>(settings.AppVersionCollectionName);
+            UsersFeedback = database.GetCollection<UserFeedback>(settings.UsersFeedbackCollectionName);
+            Users = database.GetCollection<User>(settings.UsersCollectionName);
+            UsersCredentials = database.GetCollection<UserCredentials>(settings.UserCredentialsCollectionName);
+        }
+
+        public async Task<IClientSessionHandle> StartSessionAsync() => await _mongoClient.StartSessionAsync();
     }
 }

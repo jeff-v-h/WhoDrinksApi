@@ -18,7 +18,7 @@ namespace DontThinkJustDrink.Api.Managers
             _passwordHelper = passwordHelper;
         }
 
-        public Task<bool> SignUpUser(SignUpRequest request)
+        public async Task SignUpUser(SignUpRequest request)
         {
             var user = new User
             {
@@ -34,7 +34,7 @@ namespace DontThinkJustDrink.Api.Managers
                 Hashed = _passwordHelper.Hash(request.Password)
             };
 
-            return _userRepo.CreateUser(user, credentials);
+            await _userRepo.CreateUser(user, credentials);
         }
     }
 }

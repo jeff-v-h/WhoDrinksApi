@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Repositories.Interfaces
 {
-    public interface IUserAuthRepository
+    public interface IUserRepository
     {
-        Task<bool> CreateUser(User user, UserCredentials credentials);
+        Task CreateUser(User user, UserCredentials credentials);
     }
 }

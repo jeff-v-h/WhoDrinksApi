@@ -1,5 +1,6 @@
 using DontThinkJustDrink.Api.Data;
 using DontThinkJustDrink.Api.Data.Interfaces;
+using DontThinkJustDrink.Api.Helpers;
 using DontThinkJustDrink.Api.Managers;
 using DontThinkJustDrink.Api.Managers.Interfaces;
 using DontThinkJustDrink.Api.Repositories;
@@ -48,6 +49,7 @@ namespace DontThinkJustDrink.Api
             services.AddTransient<IAppVersionManager, AppVersionManager>();
             services.AddTransient<IUserFeedbackManager, UserFeedbackManager>();
             services.AddTransient<IUserManager, UserManager>();
+            services.AddTransient<IPasswordHelper, PasswordHelper>();
 
             #endregion
 

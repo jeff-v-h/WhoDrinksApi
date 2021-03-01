@@ -5,7 +5,7 @@
         string ConnectionString { get; set; }
         string DatabaseName { get; set; }
         string AppVersionCollectionName { get; set; }
-        string UserFeedbackCollectionName { get; set; }
+        string UsersFeedbackCollectionName { get; set; }
         string UsersCollectionName { get; set; }
         string UserCredentialsCollectionName { get; set; }
     }
