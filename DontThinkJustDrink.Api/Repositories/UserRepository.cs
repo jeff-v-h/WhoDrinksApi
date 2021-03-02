@@ -41,12 +41,10 @@ namespace DontThinkJustDrink.Api.Repositories
 
         private bool IsDuplicateEmailError(MongoWriteException ex)
         {
-            var writeError = (ex.InnerException as MongoBulkWriteException)?.WriteErrors.FirstOrDefault();
+            var writeError = (ex.InnerException as MongoBulkWriteException)?.WriteErrors
+                .FirstOrDefault(we => we.Category == ServerErrorCategory.DuplicateKey && we.Code == 11000);
+            
             if (writeError == null) {
-                return false;
-            }
-
-            if (writeError.Code != 11000 || writeError.Category != ServerErrorCategory.DuplicateKey) {
                 return false;
             }
 
