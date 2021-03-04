@@ -54,9 +54,9 @@ namespace DontThinkJustDrink.Api.Helpers
             var salt = parts[0].Substring(0, 8) + parts[1];
             var saltAsBytes = Convert.FromBase64String(salt);
             var iterationsFromStoredHash = Convert.ToInt32(parts[2]);
-            var hashFromPassword = DeriveHash(password, saltAsBytes, iterationsFromStoredHash);
+            var derivedHashFromPassword = DeriveHash(password, saltAsBytes, iterationsFromStoredHash);
 
-            if (hashFromPassword != storedHash) {
+            if (derivedHashFromPassword != parts[0].Substring(8)) {
                 return (false, false);
             }
 

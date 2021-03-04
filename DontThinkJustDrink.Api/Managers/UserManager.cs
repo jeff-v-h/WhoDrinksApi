@@ -53,13 +53,9 @@ namespace DontThinkJustDrink.Api.Managers
             }
 
             (var verified, var needsUpgrade) = _passwordHelper.Check(userCredentials.Hashed, password);
-            var response = new LoginResponse
-            {
-                IsVerified = verified
-            };
 
             if (!verified) {
-                return response;
+                return null;
             }
 
             var user = await _userRepo.GetUser(userCredentials.UserId);
@@ -69,9 +65,11 @@ namespace DontThinkJustDrink.Api.Managers
                 throw new KeyNotFoundException();
             }
 
-            response.ShouldUpdatePassword = needsUpgrade;
-            response.Username = user.Username;
-            return response;
+            return new LoginResponse
+            {
+                Username = user.Username,
+                ShouldUpdatePassword = needsUpgrade
+            };
         }
     }
 }

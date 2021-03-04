@@ -4,6 +4,7 @@ using DontThinkJustDrink.Api.Models.Exceptions;
 using DontThinkJustDrink.Api.Models.RequestModels;
 using DontThinkJustDrink.Api.Models.ResponseModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -40,9 +41,15 @@ namespace DontThinkJustDrink.Api.Controllers
 
         [HttpPost("auth")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult<LoginResponse>> Authenticate([FromBody] LoginRequest request)
         {
-            return Ok(await _userManager.Authenticate(request.Email, request.Password));
+            try {
+                var response = await _userManager.Authenticate(request.Email, request.Password);
+                return response == null ? BadRequest() : Ok(response);
+            } catch (KeyNotFoundException) {
+                return BadRequest();
+            }
         }
     }
 }
