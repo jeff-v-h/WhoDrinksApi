@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+﻿using DontThinkJustDrink.Api.Settings;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
 using System.Security.Cryptography;
 
@@ -6,14 +7,19 @@ namespace DontThinkJustDrink.Api.Helpers
 {
     public class PasswordHelper : IPasswordHelper
     {
-        private const int Iterations = 10000;
+        private readonly int _iterations;
+
+        public PasswordHelper(IHashingSettings hashSettings)
+        {
+            _iterations = hashSettings.Iterations;
+        }
 
         public string Hash(string pw)
         {
             var saltAsBytes = GenerateRandomSaltBytes();
             var salt = Convert.ToBase64String(saltAsBytes);
-            var hashed = DeriveHash(pw, saltAsBytes, Iterations);
-            return $"{salt.Substring(0, 8)}{hashed}.{salt.Substring(8)}.{Iterations}";
+            var hashed = DeriveHash(pw, saltAsBytes, _iterations);
+            return $"{salt.Substring(0, 8)}{hashed}.{salt.Substring(8)}.{_iterations}";
         }
 
         private byte[] GenerateRandomSaltBytes()
@@ -37,9 +43,9 @@ namespace DontThinkJustDrink.Api.Helpers
                 numBytesRequested: 256 / 8));
         }
 
-        public (bool verified, bool needsUpgrade) Check(string hash, string password)
+        public (bool verified, bool needsUpgrade) Check(string storedHash, string password)
         {
-            var parts = hash.Split('.', 3);
+            var parts = storedHash.Split('.', 3);
 
             if (parts.Length != 3) {
                 throw new FormatException("Unexpected hash format.");
@@ -47,14 +53,14 @@ namespace DontThinkJustDrink.Api.Helpers
 
             var salt = parts[0].Substring(0, 8) + parts[1];
             var saltAsBytes = Convert.FromBase64String(salt);
-            var hashed = DeriveHash(password, saltAsBytes, Iterations);
+            var iterationsFromStoredHash = Convert.ToInt32(parts[2]);
+            var hashFromPassword = DeriveHash(password, saltAsBytes, iterationsFromStoredHash);
 
-            if (hashed != hash) {
+            if (hashFromPassword != storedHash) {
                 return (false, false);
             }
 
-            var iterations = Convert.ToInt32(parts[2]);
-            var needsUpgrade = iterations < 100;
+            var needsUpgrade = iterationsFromStoredHash != _iterations;
 
             return (true, needsUpgrade);
         }
