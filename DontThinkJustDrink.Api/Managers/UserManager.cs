@@ -4,6 +4,8 @@ using DontThinkJustDrink.Api.Models;
 using DontThinkJustDrink.Api.Models.RequestModels;
 using DontThinkJustDrink.Api.Models.ResponseModels;
 using DontThinkJustDrink.Api.Repositories.Interfaces;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Managers
@@ -12,11 +14,13 @@ namespace DontThinkJustDrink.Api.Managers
     {
         private readonly IUserRepository _userRepo;
         private readonly IPasswordHelper _passwordHelper;
+        private readonly ILogger<UserManager> _logger;
 
-        public UserManager(IUserRepository authRepo, IPasswordHelper passwordHelper)
+        public UserManager(IUserRepository authRepo, IPasswordHelper passwordHelper, ILogger<UserManager> logger)
         {
             _userRepo = authRepo;
             _passwordHelper = passwordHelper;
+            _logger = logger;
         }
 
         public async Task SignUpUser(SignUpRequest request)
@@ -40,7 +44,34 @@ namespace DontThinkJustDrink.Api.Managers
 
         public async Task<LoginResponse> Authenticate(string email, string password)
         {
+            var userCredentials = await _userRepo.GetUserCredentials(email);
 
+            if (userCredentials == null) {
+                var msg = $"User with email {email} could not be found.";
+                _logger.LogError(msg);
+                throw new KeyNotFoundException(msg);
+            }
+
+            (var verified, var needsUpgrade) = _passwordHelper.Check(userCredentials.Hashed, password);
+            var response = new LoginResponse
+            {
+                IsVerified = verified
+            };
+
+            if (!verified) {
+                return response;
+            }
+
+            var user = await _userRepo.GetUser(userCredentials.UserId);
+
+            if (user == null) {
+                _logger.LogError($"User with id {userCredentials.UserId} could not be found");
+                throw new KeyNotFoundException();
+            }
+
+            response.ShouldUpdatePassword = needsUpgrade;
+            response.Username = user.Username;
+            return response;
         }
     }
 }

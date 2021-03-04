@@ -22,12 +22,13 @@ namespace DontThinkJustDrink.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.Accepted)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult> SignUp([FromBody] SignUpRequest request)
         {
             try {
                 await _userManager.SignUpUser(request);
-                return Accepted();
+                return Ok();
             } catch (DuplicateEmailException) {
                 return BadRequest(new ErrorDetails
                 {
@@ -37,10 +38,11 @@ namespace DontThinkJustDrink.Api.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
+        [HttpPost("auth")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<ActionResult<LoginResponse>> Authenticate([FromBody] LoginRequest request)
         {
-
+            return Ok(await _userManager.Authenticate(request.Email, request.Password));
         }
     }
 }
