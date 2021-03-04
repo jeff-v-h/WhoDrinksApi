@@ -1,6 +1,8 @@
 ﻿using DontThinkJustDrink.Api.Managers.Interfaces;
+using DontThinkJustDrink.Api.Models;
 using DontThinkJustDrink.Api.Models.Exceptions;
 using DontThinkJustDrink.Api.Models.RequestModels;
+using DontThinkJustDrink.Api.Models.ResponseModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
@@ -27,8 +29,18 @@ namespace DontThinkJustDrink.Api.Controllers
                 await _userManager.SignUpUser(request);
                 return Accepted();
             } catch (DuplicateEmailException) {
-                return BadRequest($"User already exists for email: {request.Email}");
+                return BadRequest(new ErrorDetails
+                {
+                    StatusCode = 400,
+                    Message = $"User already exists for email: {request.Email}"
+                });
             }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginRequest request)
+        {
+
         }
     }
 }

@@ -50,5 +50,11 @@ namespace DontThinkJustDrink.Api.Repositories
 
             return writeError.Message.Contains("Email:");
         }
+
+        public async Task Authenticate(string email, string password)
+        {
+            var credentials = await _context.UsersCredentials.Find(uc => uc.Email == email).FirstOrDefaultAsync();
+
+        }
     }
 }

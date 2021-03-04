@@ -2,6 +2,7 @@
 using DontThinkJustDrink.Api.Managers.Interfaces;
 using DontThinkJustDrink.Api.Models;
 using DontThinkJustDrink.Api.Models.RequestModels;
+using DontThinkJustDrink.Api.Models.ResponseModels;
 using DontThinkJustDrink.Api.Repositories.Interfaces;
 using System.Threading.Tasks;
 
@@ -35,6 +36,11 @@ namespace DontThinkJustDrink.Api.Managers
             };
 
             await _userRepo.CreateUser(user, credentials);
+        }
+
+        public async Task<LoginResponse> Authenticate(string email, string password)
+        {
+
         }
     }
 }
