@@ -24,9 +24,10 @@ namespace DontThinkJustDrink.Api.Repositories
         public async Task CreateUser(User user, UserCredentials credentials)
         {
             using var session = await _context.StartSessionAsync();
-            session.StartTransaction();
 
             try {
+                session.StartTransaction();
+
                 await _context.Users.InsertOneAsync(session, user);
                 credentials.UserId = user.Id;
                 await _context.UsersCredentials.InsertOneAsync(session, credentials);
