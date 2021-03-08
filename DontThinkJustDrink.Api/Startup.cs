@@ -37,11 +37,15 @@ namespace DontThinkJustDrink.Api
                 Configuration.GetSection(nameof(MainAppDatabaseSettings)));
             services.Configure<HashingSettings>(
                 Configuration.GetSection(nameof(HashingSettings)));
+            services.Configure<BasicSecuritySettings>(
+                Configuration.GetSection(nameof(BasicSecuritySettings)));
 
             services.AddSingleton<IMainAppDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<MainAppDatabaseSettings>>().Value);
             services.AddSingleton<IHashingSettings>(sp =>
                 sp.GetRequiredService<IOptions<HashingSettings>>().Value);
+            services.AddSingleton<IBasicSecuritySettings>(sp =>
+                sp.GetRequiredService<IOptions<BasicSecuritySettings>>().Value);
 
             #endregion
 

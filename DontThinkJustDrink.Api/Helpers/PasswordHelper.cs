@@ -8,10 +8,12 @@ namespace DontThinkJustDrink.Api.Helpers
     public class PasswordHelper : IPasswordHelper
     {
         private readonly int _iterations;
+        private readonly IBasicSecuritySettings _securitySettings;
 
-        public PasswordHelper(IHashingSettings hashSettings)
+        public PasswordHelper(IHashingSettings hashSettings, IBasicSecuritySettings securitySettings)
         {
             _iterations = hashSettings.Iterations;
+            _securitySettings = securitySettings;
         }
 
         public string Hash(string pw)
@@ -64,5 +66,17 @@ namespace DontThinkJustDrink.Api.Helpers
 
             return (true, needsUpgrade);
         }
+
+        public bool CheckBasic(string username, string password)
+        {
+            return password == GetPasswordForUsername(username);
+        }
+
+        private string GetPasswordForUsername(string username) =>
+            username switch
+            {
+                BasicAuthUsernames.Mobile => _securitySettings.MobileAppPassword,
+                _ => throw new ArgumentException(message: "Invalid username for auth", paramName: username)
+            };
     }
 }
