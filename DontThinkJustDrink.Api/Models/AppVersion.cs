@@ -11,5 +11,6 @@ namespace DontThinkJustDrink.Api.Models
         public string Version { get; set; }
         public bool ForceUpgrade { get; set; }
         public bool RecommendUpgrade { get; set; }
+        public string Announcement { get; set; }
     }
 }
