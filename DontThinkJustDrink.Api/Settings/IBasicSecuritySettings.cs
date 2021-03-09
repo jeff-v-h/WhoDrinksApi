@@ -7,6 +7,6 @@
 
     public static class BasicAuthUsernames
     {
-        public const string Mobile = "MobileApp";
+        public const string Mobile = "DTJDMobileApp";
     }
 }

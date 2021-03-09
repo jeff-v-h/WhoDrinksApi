@@ -3,6 +3,7 @@ using DontThinkJustDrink.Api.Models;
 using DontThinkJustDrink.Api.Models.Exceptions;
 using DontThinkJustDrink.Api.Models.RequestModels;
 using DontThinkJustDrink.Api.Models.ResponseModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Net;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase

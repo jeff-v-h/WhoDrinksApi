@@ -1,14 +1,12 @@
 ﻿using DontThinkJustDrink.Api.Helpers;
-using DontThinkJustDrink.Api.Settings;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -32,7 +30,7 @@ namespace DontThinkJustDrink.Api.Middlewares
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            // skip authentication if endpoint has [AllowAnonymous] attribute
+            // Skip authentication if endpoint has [AllowAnonymous] attribute
             var endpoint = Context.GetEndpoint();
             if (endpoint?.Metadata?.GetMetadata<IAllowAnonymous>() != null)
                 return AuthenticateResult.NoResult();
@@ -40,13 +38,17 @@ namespace DontThinkJustDrink.Api.Middlewares
             if (!Request.Headers.ContainsKey("Authorization"))
                 return AuthenticateResult.Fail("Missing Authorization Header");
 
+            string username;
+
             try {
                 var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
                 var credentialBytes = Convert.FromBase64String(authHeader.Parameter);
                 var credentials = Encoding.UTF8.GetString(credentialBytes).Split(new[] { ':' }, 2);
-                var username = credentials[0];
+                username = credentials[0];
                 var password = credentials[1];
-                if (!_passwordHelper.CheckBasic(username, password)) {
+                
+                var isAuthenticated = await Task.Run(() => _passwordHelper.CheckBasic(username, password));
+                if (!isAuthenticated) {
                     AuthenticateResult.Fail("Invalid Username or Password");
                 }
             } catch {
@@ -54,8 +56,8 @@ namespace DontThinkJustDrink.Api.Middlewares
             }
 
             var claims = new[] {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.NameIdentifier, username),
+                new Claim(ClaimTypes.Name, username),
             };
             var identity = new ClaimsIdentity(claims, Scheme.Name);
             var principal = new ClaimsPrincipal(identity);
