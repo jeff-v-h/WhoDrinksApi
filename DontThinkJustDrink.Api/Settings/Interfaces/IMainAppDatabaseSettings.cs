@@ -1,4 +1,4 @@
-﻿namespace DontThinkJustDrink.Api.Settings
+﻿namespace DontThinkJustDrink.Api.Settings.Interfaces
 {
     public interface IMainAppDatabaseSettings
     {

@@ -7,6 +7,7 @@ using DontThinkJustDrink.Api.Middlewares;
 using DontThinkJustDrink.Api.Repositories;
 using DontThinkJustDrink.Api.Repositories.Interfaces;
 using DontThinkJustDrink.Api.Settings;
+using DontThinkJustDrink.Api.Settings.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
