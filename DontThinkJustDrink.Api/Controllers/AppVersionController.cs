@@ -1,5 +1,6 @@
 ﻿using DontThinkJustDrink.Api.Managers.Interfaces;
 using DontThinkJustDrink.Api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class AppVersionController : ControllerBase

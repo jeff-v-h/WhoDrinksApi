@@ -7,6 +7,7 @@ using DontThinkJustDrink.Api.Middlewares;
 using DontThinkJustDrink.Api.Repositories;
 using DontThinkJustDrink.Api.Repositories.Interfaces;
 using DontThinkJustDrink.Api.Settings;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -29,15 +30,28 @@ namespace DontThinkJustDrink.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddControllers();
+
+            // configure basic authentication 
+            services.AddAuthentication("BasicAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
             #region Configuration Dependencies
 
             services.Configure<MainAppDatabaseSettings>(
                 Configuration.GetSection(nameof(MainAppDatabaseSettings)));
+            services.Configure<HashingSettings>(
+                Configuration.GetSection(nameof(HashingSettings)));
+            services.Configure<BasicSecuritySettings>(
+                Configuration.GetSection(nameof(BasicSecuritySettings)));
 
             services.AddSingleton<IMainAppDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<MainAppDatabaseSettings>>().Value);
+            services.AddSingleton<IHashingSettings>(sp =>
+                sp.GetRequiredService<IOptions<HashingSettings>>().Value);
+            services.AddSingleton<IBasicSecuritySettings>(sp =>
+                sp.GetRequiredService<IOptions<BasicSecuritySettings>>().Value);
 
             #endregion
 
@@ -60,7 +74,6 @@ namespace DontThinkJustDrink.Api
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -76,6 +89,12 @@ namespace DontThinkJustDrink.Api
 
             app.UseRouting();
 
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
