@@ -85,9 +85,9 @@ namespace DontThinkJustDrink.Api
             }
 
             app.UseMiddleware<ExceptionMiddleware>();
-
+#if !DEBUG
             app.UseHttpsRedirection();
-
+#endif
             app.UseRouting();
 
             app.UseCors(x => x
