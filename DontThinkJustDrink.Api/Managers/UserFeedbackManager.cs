@@ -2,6 +2,7 @@
 using DontThinkJustDrink.Api.Models;
 using DontThinkJustDrink.Api.Models.RequestModels;
 using DontThinkJustDrink.Api.Repositories.Interfaces;
+using System;
 using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Managers
@@ -22,7 +23,9 @@ namespace DontThinkJustDrink.Api.Managers
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Email = request.Email,
-                Feedback = request.Feedback
+                Feedback = request.Feedback,
+                UserCreatedOn = request.UserCreatedOn,
+                CreatedOn = DateTime.UtcNow
             });
         }
     }

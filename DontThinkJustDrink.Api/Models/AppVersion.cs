@@ -12,5 +12,7 @@ namespace DontThinkJustDrink.Api.Models
         public bool ForceUpgrade { get; set; }
         public bool RecommendUpgrade { get; set; }
         public string Announcement { get; set; }
+        public string TCsVersionAgreedTo { get; set; } // FE or BE prefix = frontend or backend version
+        public bool ForceNewTCsAgreement { get; set; }
     }
 }

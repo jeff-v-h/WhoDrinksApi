@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System;
 
 namespace DontThinkJustDrink.Api.Models
 {
@@ -12,5 +13,7 @@ namespace DontThinkJustDrink.Api.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Feedback { get; set; }
+        public DateTime UserCreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }

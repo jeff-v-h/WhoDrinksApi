@@ -18,11 +18,11 @@ namespace DontThinkJustDrink.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Accepted)]
         public async Task<ActionResult<UserFeedbackRequest>> Create([FromBody] UserFeedbackRequest request)
         {
             await _feedbackManager.Create(request);
-            return Ok(request);
+            return Accepted();
         }
     }
 }
