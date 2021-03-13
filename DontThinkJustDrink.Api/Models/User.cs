@@ -13,6 +13,10 @@ namespace DontThinkJustDrink.Api.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public bool AgreedToPrivacyPolicy { get; set; }
-        public bool AgreedToTermsAndConditions { get; set; }
+        public bool AgreedToTCs { get; set; }
+        // FE or BE prefix = frontend or backend version
+        public string PrivacyPolicyVersionAgreedTo { get; set; }
+        public string TCsVersionAgreedTo { get; set; }
+        public string CurrentAppVersion { get; set; }
     }
 }
