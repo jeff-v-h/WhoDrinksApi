@@ -9,8 +9,11 @@ namespace DontThinkJustDrink.Api.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         public string Version { get; set; }
-        public bool ForceUpgrade { get; set; }
-        public bool RecommendUpgrade { get; set; }
+        public string LatestVersion { get; set; }
+        public bool ForceUpdate { get; set; }
+        public bool RecommendUpdate { get; set; }
+        public string AndroidUpdateUrl { get; set; }
+        public string IOSUpdateUrl { get; set; }
         public string Announcement { get; set; }
         // FE or BE prefix = frontend or backend version
         public string AssociatedPrivacyPolicyVersion { get; set; }
