@@ -24,6 +24,16 @@ namespace DontThinkJustDrink.Api.Controllers
             _userManager = userManager;
         }
 
+        [HttpGet("{deviceId}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public async Task<ActionResult<User>> GetUser([FromQuery(Name="Email")] string email, [FromQuery(Name = "DeviceId")] string deviceId)
+        {
+            var user = email != null
+                ? await _userManager.GetUserByEmail(email)
+                : await _userManager.GetUserByDeviceId(deviceId);
+            return Ok(user);
+        }
+
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]

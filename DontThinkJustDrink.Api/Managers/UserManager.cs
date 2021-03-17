@@ -2,6 +2,7 @@
 using DontThinkJustDrink.Api.Helpers;
 using DontThinkJustDrink.Api.Managers.Interfaces;
 using DontThinkJustDrink.Api.Models;
+using DontThinkJustDrink.Api.Models.Exceptions;
 using DontThinkJustDrink.Api.Models.RequestModels;
 using DontThinkJustDrink.Api.Models.ResponseModels;
 using DontThinkJustDrink.Api.Repositories.Interfaces;
@@ -26,6 +27,10 @@ namespace DontThinkJustDrink.Api.Managers
 
         public async Task<string> CreateUser(CreateUserRequest request)
         {
+            if (!request.Email.IsNullOrEmpty() && await _userRepo.UserEmailExists(request.Email)) {
+                throw new DuplicateEmailException();
+            }
+
             var user = new User
             {
                 Email = request.Email,
@@ -45,21 +50,23 @@ namespace DontThinkJustDrink.Api.Managers
 
         public async Task UpdateUser(string id, UpdateUserRequest request)
         {
-            var user = new User
-            {
-                Id = request.Id,
-                Email = request.Email,
-                DeviceIds = request.DeviceIds,
-                Username = request.Username,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                ConfirmedDisclaimer = request.ConfirmedDisclaimer,
-                AgreedToPrivacyPolicy = request.AgreedToPrivacyPolicy,
-                AgreedToTCs = request.AgreedToTCs,
-                PrivacyPolicyVersionAgreedTo = request.PrivacyPolicyVersionAgreedTo,
-                TCsVersionAgreedTo = request.TCsVersionAgreedTo,
-                CurrentAppVersion = request.CurrentAppVersion
-            };
+            var user = await _userRepo.GetUser(id);
+            if (!request.Email.IsNullOrEmpty() && user.Email != request.Email && await _userRepo.UserEmailExists(request.Email)) {
+                throw new DuplicateEmailException();
+            }
+
+            user.Id = request.Id;
+            user.Email = request.Email;
+            user.DeviceIds = request.DeviceIds;
+            user.Username = request.Username;
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.ConfirmedDisclaimer = request.ConfirmedDisclaimer;
+            user.AgreedToPrivacyPolicy = request.AgreedToPrivacyPolicy;
+            user.AgreedToTCs = request.AgreedToTCs;
+            user.PrivacyPolicyVersionAgreedTo = request.PrivacyPolicyVersionAgreedTo;
+            user.TCsVersionAgreedTo = request.TCsVersionAgreedTo;
+            user.CurrentAppVersion = request.CurrentAppVersion;
 
             await _userRepo.UpdateUser(id, user);
         }
@@ -76,6 +83,10 @@ namespace DontThinkJustDrink.Api.Managers
 
         public async Task SignUpUser(SignUpRequest request)
         {
+            if (await _userRepo.UserEmailExists(request.Email)) {
+                throw new DuplicateEmailException();
+            }
+
             var user = new User
             {
                 Id = request.Id,
