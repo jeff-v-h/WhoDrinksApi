@@ -1,4 +1,5 @@
-﻿using DontThinkJustDrink.Api.Helpers;
+﻿using DontThinkJustDrink.Api.Extensions;
+using DontThinkJustDrink.Api.Helpers;
 using DontThinkJustDrink.Api.Managers.Interfaces;
 using DontThinkJustDrink.Api.Models;
 using DontThinkJustDrink.Api.Models.RequestModels;
@@ -23,14 +24,72 @@ namespace DontThinkJustDrink.Api.Managers
             _logger = logger;
         }
 
-        public async Task SignUpUser(SignUpRequest request)
+        public async Task<string> CreateUser(CreateUserRequest request)
         {
             var user = new User
             {
                 Email = request.Email,
+                DeviceIds = new List<string>()
+                {
+                    request.DeviceId
+                },
                 Username = request.Username,
                 FirstName = request.FirstName,
-                LastName = request.LastName
+                LastName = request.LastName,
+                ConfirmedDisclaimer = request.ConfirmedDisclaimer,
+                CurrentAppVersion = request.CurrentAppVersion
+            };
+            await _userRepo.CreateUser(user);
+            return user.Id;
+        }
+
+        public async Task UpdateUser(string id, UpdateUserRequest request)
+        {
+            var user = new User
+            {
+                Id = request.Id,
+                Email = request.Email,
+                DeviceIds = request.DeviceIds,
+                Username = request.Username,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                ConfirmedDisclaimer = request.ConfirmedDisclaimer,
+                AgreedToPrivacyPolicy = request.AgreedToPrivacyPolicy,
+                AgreedToTCs = request.AgreedToTCs,
+                PrivacyPolicyVersionAgreedTo = request.PrivacyPolicyVersionAgreedTo,
+                TCsVersionAgreedTo = request.TCsVersionAgreedTo,
+                CurrentAppVersion = request.CurrentAppVersion
+            };
+
+            await _userRepo.UpdateUser(id, user);
+        }
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            return await _userRepo.GetUserByEmail(email);
+        }
+
+        public async Task<User> GetUserByDeviceId(string deviceId)
+        {
+            return await _userRepo.GetUserByDeviceId(deviceId);
+        }
+
+        public async Task SignUpUser(SignUpRequest request)
+        {
+            var user = new User
+            {
+                Id = request.Id,
+                Email = request.Email,
+                DeviceIds = request.DeviceIds,
+                Username = request.Username,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                ConfirmedDisclaimer = request.ConfirmedDisclaimer,
+                AgreedToPrivacyPolicy = request.AgreedToPrivacyPolicy,
+                AgreedToTCs = request.AgreedToTCs,
+                PrivacyPolicyVersionAgreedTo = request.PrivacyPolicyVersionAgreedTo,
+                TCsVersionAgreedTo = request.TCsVersionAgreedTo,
+                CurrentAppVersion = request.CurrentAppVersion
             };
 
             var credentials = new UserCredentials
@@ -39,7 +98,16 @@ namespace DontThinkJustDrink.Api.Managers
                 Hashed = _passwordHelper.Hash(request.Password)
             };
 
-            await _userRepo.CreateUser(user, credentials);
+            await _userRepo.Transact(async session =>
+            {
+                if (request.Id.IsNullOrEmpty()) {
+                    await _userRepo.CreateUser(user, session);
+                } else {
+                    await _userRepo.UpdateUser(request.Id, user, session);
+                }
+
+                await _userRepo.CreateCredentials(credentials, session);
+            });
         }
 
         public async Task<LoginResponse> Authenticate(string email, string password)
