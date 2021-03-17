@@ -21,6 +21,39 @@ namespace DontThinkJustDrink.Api.Repositories
             _logger = logger;
         }
 
+        public async Task Transact(Action<IClientSessionHandle> action)
+        {
+            using var session = await _context.StartSessionAsync();
+            
+            try {
+                action(session);
+                await session.CommitTransactionAsync();
+            } catch {
+                await session.AbortTransactionAsync();
+                throw;
+            }
+        }
+
+        public async Task<User> GetUser(string id)
+        {
+            return await _context.Users.Find(u => u.Id == id).FirstOrDefaultAsync();
+        }
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            return await _context.Users.Find(u => u.Email == email).FirstOrDefaultAsync();
+        }
+
+        public async Task<User> GetUserByDeviceId(string deviceId)
+        {
+            return await _context.Users.Find(u => u.DeviceIds.Contains(deviceId)).FirstOrDefaultAsync();
+        }
+
+        public async Task<UserCredentials> GetUserCredentials(string email)
+        {
+            return await _context.UsersCredentials.Find(uc => uc.Email == email).FirstOrDefaultAsync();
+        }
+
         public async Task CreateUser(User user, UserCredentials credentials)
         {
             using var session = await _context.StartSessionAsync();
@@ -33,11 +66,39 @@ namespace DontThinkJustDrink.Api.Repositories
                 await _context.UsersCredentials.InsertOneAsync(session, credentials);
 
                 await session.CommitTransactionAsync();
+                // GET rid of this
             } catch (MongoWriteException mwe) when (IsDuplicateEmailError(mwe)) {
                 _logger.LogError(mwe, $"Unable to complete creation of user with auth for email: {user.Email}; full name: {user.FirstName} {user.LastName}");
                 await session.AbortTransactionAsync();
                 throw new DuplicateEmailException();
             }
+        }
+
+        public async Task CreateUser(User user, IClientSessionHandle session = null)
+        {
+            if (session != null) {
+                await _context.Users.InsertOneAsync(session, user);
+                return;
+            }
+            await _context.Users.InsertOneAsync(user);
+        }
+
+        public async Task UpdateUser(string id, User user, IClientSessionHandle session = null)
+        {
+            if (session != null) {
+                await _context.Users.ReplaceOneAsync(session, u => u.Id == id, user);
+                return;
+            }
+            await _context.Users.ReplaceOneAsync(u => u.Id == id, user);
+        }
+
+        public async Task CreateCredentials(UserCredentials credentials, IClientSessionHandle session = null)
+        {
+            if (session != null) {
+                await _context.UsersCredentials.InsertOneAsync(session, credentials);
+                return;
+            }
+            await _context.UsersCredentials.InsertOneAsync(credentials);
         }
 
         private bool IsDuplicateEmailError(MongoWriteException ex)
@@ -50,16 +111,6 @@ namespace DontThinkJustDrink.Api.Repositories
             }
 
             return writeError.Message.Contains("Email:");
-        }
-
-        public async Task<User> GetUser(string id)
-        {
-            return await _context.Users.Find(uc => uc.Id == id).FirstOrDefaultAsync();
-        }
-
-        public async Task<UserCredentials> GetUserCredentials(string email)
-        {
-            return await _context.UsersCredentials.Find(uc => uc.Email == email).FirstOrDefaultAsync();
         }
     }
 }
