@@ -7,9 +7,12 @@ namespace DontThinkJustDrink.Api.Managers.Interfaces
 {
     public interface IUserManager
     {
+        Task<User> GetUser(string id);
         Task<User> GetUserByEmail(string email);
         Task<User> GetUserByDeviceId(string deviceId);
-        Task SignUpUser(SignUpRequest request);
+        Task<string> CreateUser(CreateUserRequest request);
+        Task UpdateUser(string id, UpdateUserRequest request);
+        Task<string> SignUpUser(SignUpRequest request);
         Task<LoginResponse> Authenticate(string email, string password);
     }
 }

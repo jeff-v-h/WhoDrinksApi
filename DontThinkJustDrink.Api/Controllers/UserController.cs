@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
-
 namespace DontThinkJustDrink.Api.Controllers
 {
     [Authorize]
@@ -24,24 +23,59 @@ namespace DontThinkJustDrink.Api.Controllers
             _userManager = userManager;
         }
 
-        [HttpGet("{deviceId}")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<ActionResult<User>> GetUser([FromQuery(Name="Email")] string email, [FromQuery(Name = "DeviceId")] string deviceId)
+        [HttpGet]
+        [ProducesResponseType(typeof(User), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<User>> Get([FromQuery(Name = "Id")] string id, [FromQuery(Name = "Email")] string email, [FromQuery(Name = "DeviceId")] string deviceId)
         {
-            var user = email != null
-                ? await _userManager.GetUserByEmail(email)
+            var user = id != null ? await _userManager.GetUser(id)
+                : email != null ? await _userManager.GetUserByEmail(email)
                 : await _userManager.GetUserByDeviceId(deviceId);
             return Ok(user);
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(CreateUserResponse), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<CreateUserResponse>> Create([FromBody] CreateUserRequest request)
+        {
+            return Ok(new CreateUserResponse
+            {
+                Id = await _userManager.CreateUser(request)
+            });
+        }
+
+        [HttpPost("{id}")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult> SignUp([FromBody] SignUpRequest request)
+        [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.BadRequest)]
+        public async Task<ActionResult> Update(string id, [FromBody] UpdateUserRequest request)
         {
             try {
-                await _userManager.SignUpUser(request);
+                await _userManager.UpdateUser(id, request);
                 return Ok();
+            } catch (DuplicateEmailException) {
+                return BadRequest(new ErrorDetails
+                {
+                    StatusCode = 400,
+                    Message = $"User already exists for email: {request.Email}"
+                });
+            } catch (KeyNotFoundException) {
+                return BadRequest(new ErrorDetails
+                {
+                    StatusCode = 400,
+                    Message = $"No User found with id: {id}"
+                });
+            }
+        }
+
+        [HttpPost("signup")]
+        [ProducesResponseType(typeof(SignUpResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorDetails), (int)HttpStatusCode.BadRequest)]
+        public async Task<ActionResult<SignUpResponse>> SignUp([FromBody] SignUpRequest request)
+        {
+            try {
+                return Ok(new SignUpResponse
+                {
+                    Id = await _userManager.SignUpUser(request)
+                });
             } catch (DuplicateEmailException) {
                 return BadRequest(new ErrorDetails
                 {
@@ -52,7 +86,7 @@ namespace DontThinkJustDrink.Api.Controllers
         }
 
         [HttpPost("auth")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(LoginResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult<LoginResponse>> Authenticate([FromBody] LoginRequest request)
         {

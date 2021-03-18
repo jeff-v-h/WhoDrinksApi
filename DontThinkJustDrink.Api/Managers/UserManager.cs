@@ -25,15 +25,26 @@ namespace DontThinkJustDrink.Api.Managers
             _logger = logger;
         }
 
+        public async Task<User> GetUser(string id)
+        {
+            return await _userRepo.GetUser(id);
+        }
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            return await _userRepo.GetUserByEmail(email);
+        }
+
+        public async Task<User> GetUserByDeviceId(string deviceId)
+        {
+            return await _userRepo.GetUserByDeviceId(deviceId);
+        }
+
+        // To create user with email, use SignUp method instead
         public async Task<string> CreateUser(CreateUserRequest request)
         {
-            if (!request.Email.IsNullOrEmpty() && await _userRepo.UserEmailExists(request.Email)) {
-                throw new DuplicateEmailException();
-            }
-
             var user = new User
             {
-                Email = request.Email,
                 DeviceIds = new List<string>()
                 {
                     request.DeviceId
@@ -51,6 +62,9 @@ namespace DontThinkJustDrink.Api.Managers
         public async Task UpdateUser(string id, UpdateUserRequest request)
         {
             var user = await _userRepo.GetUser(id);
+            if (user == null) {
+                throw new KeyNotFoundException();
+            }
             if (!request.Email.IsNullOrEmpty() && user.Email != request.Email && await _userRepo.UserEmailExists(request.Email)) {
                 throw new DuplicateEmailException();
             }
@@ -71,17 +85,7 @@ namespace DontThinkJustDrink.Api.Managers
             await _userRepo.UpdateUser(id, user);
         }
 
-        public async Task<User> GetUserByEmail(string email)
-        {
-            return await _userRepo.GetUserByEmail(email);
-        }
-
-        public async Task<User> GetUserByDeviceId(string deviceId)
-        {
-            return await _userRepo.GetUserByDeviceId(deviceId);
-        }
-
-        public async Task SignUpUser(SignUpRequest request)
+        public async Task<string> SignUpUser(SignUpRequest request)
         {
             if (await _userRepo.UserEmailExists(request.Email)) {
                 throw new DuplicateEmailException();
@@ -119,6 +123,8 @@ namespace DontThinkJustDrink.Api.Managers
 
                 await _userRepo.CreateCredentials(credentials, session);
             });
+
+            return user.Id;
         }
 
         public async Task<LoginResponse> Authenticate(string email, string password)

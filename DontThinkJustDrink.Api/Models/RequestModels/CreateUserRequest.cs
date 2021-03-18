@@ -1,8 +1,10 @@
-﻿namespace DontThinkJustDrink.Api.Models.RequestModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DontThinkJustDrink.Api.Models.RequestModels
 {
     public class CreateUserRequest
     {
-        public string Email { get; set; }
+        [Required]
         public string DeviceId { get; set; }
         public string Username { get; set; }
         public string FirstName { get; set; }

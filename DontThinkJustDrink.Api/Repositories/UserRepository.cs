@@ -24,9 +24,11 @@ namespace DontThinkJustDrink.Api.Repositories
             using var session = await _context.StartSessionAsync();
             
             try {
+                session.StartTransaction();
                 action(session);
                 await session.CommitTransactionAsync();
-            } catch {
+            } catch (Exception e) {
+                var msg = e.Message;
                 await session.AbortTransactionAsync();
                 throw;
             }
