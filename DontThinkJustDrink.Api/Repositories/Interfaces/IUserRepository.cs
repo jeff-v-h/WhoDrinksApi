@@ -10,7 +10,6 @@ namespace DontThinkJustDrink.Api.Repositories.Interfaces
         Task Transact(Action<IClientSessionHandle> action);
         Task<User> GetUser(string id);
         Task<User> GetUserByEmail(string email);
-        Task<User> GetUserByDeviceId(string deviceId);
         Task<UserCredentials> GetUserCredentials(string email);
         Task<bool> UserEmailExists(string email);
         Task CreateUser(User user, IClientSessionHandle session = null);

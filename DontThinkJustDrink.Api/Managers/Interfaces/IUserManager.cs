@@ -9,7 +9,6 @@ namespace DontThinkJustDrink.Api.Managers.Interfaces
     {
         Task<User> GetUser(string id);
         Task<User> GetUserByEmail(string email);
-        Task<User> GetUserByDeviceId(string deviceId);
         Task<string> CreateUser(CreateUserRequest request);
         Task UpdateUser(string id, UpdateUserRequest request);
         Task<string> SignUpUser(SignUpRequest request);

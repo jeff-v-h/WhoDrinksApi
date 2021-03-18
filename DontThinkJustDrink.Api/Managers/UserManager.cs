@@ -35,11 +35,6 @@ namespace DontThinkJustDrink.Api.Managers
             return await _userRepo.GetUserByEmail(email);
         }
 
-        public async Task<User> GetUserByDeviceId(string deviceId)
-        {
-            return await _userRepo.GetUserByDeviceId(deviceId);
-        }
-
         // To create user with email, use SignUp method instead
         public async Task<string> CreateUser(CreateUserRequest request)
         {

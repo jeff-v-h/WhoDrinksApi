@@ -40,9 +40,6 @@ namespace DontThinkJustDrink.Api.Repositories
         public async Task<User> GetUserByEmail(string email) =>
             await _context.Users.Find(u => u.Email == email).FirstOrDefaultAsync();
 
-        public async Task<User> GetUserByDeviceId(string deviceId) =>
-            await _context.Users.Find(u => u.DeviceIds.Contains(deviceId)).FirstOrDefaultAsync();
-
         public async Task<UserCredentials> GetUserCredentials(string email) =>
             await _context.UsersCredentials.Find(uc => uc.Email == email).FirstOrDefaultAsync();
 

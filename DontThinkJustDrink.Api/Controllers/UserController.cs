@@ -27,9 +27,13 @@ namespace DontThinkJustDrink.Api.Controllers
         [ProducesResponseType(typeof(User), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<User>> Get([FromQuery(Name = "Id")] string id, [FromQuery(Name = "Email")] string email, [FromQuery(Name = "DeviceId")] string deviceId)
         {
-            var user = id != null ? await _userManager.GetUser(id)
-                : email != null ? await _userManager.GetUserByEmail(email)
-                : await _userManager.GetUserByDeviceId(deviceId);
+            if (id == null && email == null) {
+                return BadRequest(new ErrorDetails(400, "Either Id or Email query param is required"));
+            }
+
+            var user = id != null
+                ? await _userManager.GetUser(id)
+                : await _userManager.GetUserByEmail(email);
             return Ok(user);
         }
 
@@ -52,17 +56,9 @@ namespace DontThinkJustDrink.Api.Controllers
                 await _userManager.UpdateUser(id, request);
                 return Ok();
             } catch (DuplicateEmailException) {
-                return BadRequest(new ErrorDetails
-                {
-                    StatusCode = 400,
-                    Message = $"User already exists for email: {request.Email}"
-                });
+                return BadRequest(new ErrorDetails(400, $"User already exists for email: {request.Email}"));
             } catch (KeyNotFoundException) {
-                return BadRequest(new ErrorDetails
-                {
-                    StatusCode = 400,
-                    Message = $"No User found with id: {id}"
-                });
+                return BadRequest(new ErrorDetails(400, $"No User found with id: {id}"));
             }
         }
 
@@ -77,11 +73,7 @@ namespace DontThinkJustDrink.Api.Controllers
                     Id = await _userManager.SignUpUser(request)
                 });
             } catch (DuplicateEmailException) {
-                return BadRequest(new ErrorDetails
-                {
-                    StatusCode = 400,
-                    Message = $"User already exists for email: {request.Email}"
-                });
+                return BadRequest(new ErrorDetails(400, $"User already exists for email: {request.Email}"));
             }
         }
 
