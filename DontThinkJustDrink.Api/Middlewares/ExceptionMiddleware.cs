@@ -1,4 +1,5 @@
 ﻿using DontThinkJustDrink.Api.Models;
+using DontThinkJustDrink.Api.Models.ResponseModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;

@@ -1,4 +1,4 @@
-﻿using DontThinkJustDrink.Api.Models;
+﻿using DontThinkJustDrink.Api.Models.Database;
 using DontThinkJustDrink.Api.Models.RequestModels;
 using DontThinkJustDrink.Api.Models.ResponseModels;
 using System.Threading.Tasks;

@@ -1,5 +1,5 @@
 ﻿using DontThinkJustDrink.Api.Data.Interfaces;
-using DontThinkJustDrink.Api.Models;
+using DontThinkJustDrink.Api.Models.Database;
 using DontThinkJustDrink.Api.Settings.Interfaces;
 using MongoDB.Driver;
 using System.Threading.Tasks;

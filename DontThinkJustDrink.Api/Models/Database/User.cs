@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
 
-namespace DontThinkJustDrink.Api.Models
+namespace DontThinkJustDrink.Api.Models.Database
 {
     public class User
     {

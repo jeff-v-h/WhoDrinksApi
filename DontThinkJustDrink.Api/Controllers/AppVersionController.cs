@@ -1,5 +1,5 @@
 ﻿using DontThinkJustDrink.Api.Managers.Interfaces;
-using DontThinkJustDrink.Api.Models;
+using DontThinkJustDrink.Api.Models.Database;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

@@ -1,4 +1,4 @@
-﻿using DontThinkJustDrink.Api.Models;
+﻿using DontThinkJustDrink.Api.Models.Database;
 using MongoDB.Driver;
 using System.Threading.Tasks;
 

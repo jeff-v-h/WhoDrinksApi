@@ -1,7 +1,7 @@
 ﻿using DontThinkJustDrink.Api.Extensions;
 using DontThinkJustDrink.Api.Helpers;
 using DontThinkJustDrink.Api.Managers.Interfaces;
-using DontThinkJustDrink.Api.Models;
+using DontThinkJustDrink.Api.Models.Database;
 using DontThinkJustDrink.Api.Models.Exceptions;
 using DontThinkJustDrink.Api.Models.RequestModels;
 using DontThinkJustDrink.Api.Models.ResponseModels;
