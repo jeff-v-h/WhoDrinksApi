@@ -38,10 +38,10 @@ namespace DontThinkJustDrink.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(CreateUserResponse), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<CreateUserResponse>> Create([FromBody] CreateUserRequest request)
+        [ProducesResponseType(typeof(IdResponse), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IdResponse>> Create([FromBody] CreateUserRequest request)
         {
-            return Ok(new CreateUserResponse
+            return Ok(new IdResponse
             {
                 Id = await _userManager.CreateUser(request)
             });

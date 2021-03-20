@@ -6,5 +6,6 @@ namespace DontThinkJustDrink.Api.Repositories.Interfaces
     public interface IDeckRepository
     {
         Task<Deck> Get(string id);
+        Task Create(Deck deck);
     }
 }
