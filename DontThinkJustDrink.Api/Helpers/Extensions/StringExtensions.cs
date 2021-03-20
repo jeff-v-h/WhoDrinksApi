@@ -1,4 +1,4 @@
-﻿namespace DontThinkJustDrink.Api.Extensions
+﻿namespace DontThinkJustDrink.Api.Helpers.Extensions
 {
     public static class StringExtensions
     {

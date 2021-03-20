@@ -1,5 +1,5 @@
-﻿using DontThinkJustDrink.Api.Extensions;
-using DontThinkJustDrink.Api.Helpers;
+﻿using DontThinkJustDrink.Api.Helpers;
+using DontThinkJustDrink.Api.Helpers.Extensions;
 using DontThinkJustDrink.Api.Managers.Interfaces;
 using DontThinkJustDrink.Api.Models.Database;
 using DontThinkJustDrink.Api.Models.Exceptions;
