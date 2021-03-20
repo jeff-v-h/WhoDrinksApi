@@ -18,9 +18,9 @@ namespace DontThinkJustDrink.Api.Managers
         private readonly IPasswordHelper _passwordHelper;
         private readonly ILogger<UserManager> _logger;
 
-        public UserManager(IUserRepository authRepo, IPasswordHelper passwordHelper, ILogger<UserManager> logger)
+        public UserManager(IUserRepository userRepo, IPasswordHelper passwordHelper, ILogger<UserManager> logger)
         {
-            _userRepo = authRepo;
+            _userRepo = userRepo;
             _passwordHelper = passwordHelper;
             _logger = logger;
         }

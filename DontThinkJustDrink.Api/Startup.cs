@@ -62,9 +62,11 @@ namespace DontThinkJustDrink.Api
             services.AddTransient<IAppVersionRepository, AppVersionRepository>();
             services.AddTransient<IUserFeedbackRepository, UserFeedbackRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IDeckRepository, DeckRepository>();
             services.AddTransient<IAppVersionManager, AppVersionManager>();
             services.AddTransient<IUserFeedbackManager, UserFeedbackManager>();
             services.AddTransient<IUserManager, UserManager>();
+            services.AddTransient<IDeckManager, DeckManager>();
             services.AddTransient<IPasswordHelper, PasswordHelper>();
 
             #endregion

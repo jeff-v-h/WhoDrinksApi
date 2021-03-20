@@ -8,5 +8,6 @@
         string UsersFeedbackCollectionName { get; set; }
         string UsersCollectionName { get; set; }
         string UserCredentialsCollectionName { get; set; }
+        string DecksCollectionName { get; set; }
     }
 }

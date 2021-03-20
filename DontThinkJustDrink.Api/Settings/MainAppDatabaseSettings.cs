@@ -10,5 +10,6 @@ namespace DontThinkJustDrink.Api.Settings
         public string UsersFeedbackCollectionName { get; set; }
         public string UsersCollectionName { get; set; }
         public string UserCredentialsCollectionName { get; set; }
+        public string DecksCollectionName { get; set; }
     }
 }
