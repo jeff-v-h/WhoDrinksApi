@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Repositories
 {
-    public class AppVersionRepository : IAppVersionRepository
+    public class AppVersionsRepository : IAppVersionsRepository
     {
         private readonly IMainAppContext _context;
 
-        public AppVersionRepository(IMainAppContext context)
+        public AppVersionsRepository(IMainAppContext context)
         {
             _context = context;
         }

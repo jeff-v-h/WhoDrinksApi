@@ -13,12 +13,12 @@ namespace DontThinkJustDrink.Api.Controllers
     [Route("api/[controller]")]
     public class AppVersionsController : ControllerBase
     {
-        private readonly IAppVersionManager _appVersionManager;
+        private readonly IAppVersionsManager _appVersionsManager;
         private readonly ILogger<AppVersionsController> _logger;
 
-        public AppVersionsController(IAppVersionManager appVersionManager, ILogger<AppVersionsController> logger)
+        public AppVersionsController(IAppVersionsManager appVersionsManager, ILogger<AppVersionsController> logger)
         {
-            _appVersionManager = appVersionManager;
+            _appVersionsManager = appVersionsManager;
             _logger = logger;
         }
 
@@ -27,7 +27,7 @@ namespace DontThinkJustDrink.Api.Controllers
         [ProducesResponseType(typeof(AppVersion), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<AppVersion>> GetAppVersion(string version)
         {
-            var versionDetails = await _appVersionManager.GetDetails(version);
+            var versionDetails = await _appVersionsManager.GetDetails(version);
 
             if (versionDetails == null)
             {

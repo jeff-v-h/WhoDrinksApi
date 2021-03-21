@@ -1,9 +1,9 @@
 ﻿using DontThinkJustDrink.Api.Models.Database;
 using System.Threading.Tasks;
 
-namespace DontThinkJustDrink.Api.Repositories.Interfaces
+namespace DontThinkJustDrink.Api.Managers.Interfaces
 {
-    public interface IAppVersionRepository
+    public interface IAppVersionsManager
     {
         Task<AppVersion> GetDetails(string version);
     }

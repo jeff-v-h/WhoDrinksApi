@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Repositories
 {
-    public class DeckRepository : IDeckRepository
+    public class DecksRepository : IDecksRepository
     {
         private readonly IMainAppContext _context;
 
-        public DeckRepository(IMainAppContext context)
+        public DecksRepository(IMainAppContext context)
         {
             _context = context;
         }

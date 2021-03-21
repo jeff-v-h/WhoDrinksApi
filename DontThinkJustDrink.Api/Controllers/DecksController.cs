@@ -15,25 +15,25 @@ namespace DontThinkJustDrink.Api.Controllers
     [Route("api/[controller]")]
     public class DecksController : ControllerBase
     {
-        private readonly IDeckManager _deckManager;
+        private readonly IDecksManager _decksManager;
 
-        public DecksController(IDeckManager deckManager)
+        public DecksController(IDecksManager decksManager)
         {
-            _deckManager = deckManager;
+            _decksManager = decksManager;
         }
 
         [HttpGet]
         [ProducesResponseType(typeof(List<DeckData>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<Deck>> GetList()
         {
-            return Ok(await _deckManager.GetList());
+            return Ok(await _decksManager.GetList());
         }
 
         [HttpGet("{Id}")]
         [ProducesResponseType(typeof(Deck), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<Deck>> Get(string id)
         {
-            return Ok(await _deckManager.Get(id));
+            return Ok(await _decksManager.Get(id));
         }
 
         [HttpPost]
@@ -42,7 +42,7 @@ namespace DontThinkJustDrink.Api.Controllers
         {
             return Ok(new IdResponse
             {
-                Id = await _deckManager.Create(request)
+                Id = await _decksManager.Create(request)
             });
         }
     }

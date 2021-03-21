@@ -12,27 +12,27 @@ using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Managers
 {
-    public class UserManager : IUserManager
+    public class UsersManager : IUsersManager
     {
-        private readonly IUserRepository _userRepo;
+        private readonly IUsersRepository _usersRepo;
         private readonly IPasswordHelper _passwordHelper;
-        private readonly ILogger<UserManager> _logger;
+        private readonly ILogger<UsersManager> _logger;
 
-        public UserManager(IUserRepository userRepo, IPasswordHelper passwordHelper, ILogger<UserManager> logger)
+        public UsersManager(IUsersRepository userRepo, IPasswordHelper passwordHelper, ILogger<UsersManager> logger)
         {
-            _userRepo = userRepo;
+            _usersRepo = userRepo;
             _passwordHelper = passwordHelper;
             _logger = logger;
         }
 
         public async Task<User> GetUser(string id)
         {
-            return await _userRepo.GetUser(id);
+            return await _usersRepo.GetUser(id);
         }
 
         public async Task<User> GetUserByEmail(string email)
         {
-            return await _userRepo.GetUserByEmail(email);
+            return await _usersRepo.GetUserByEmail(email);
         }
 
         // To create user with email, use SignUp method instead
@@ -50,17 +50,17 @@ namespace DontThinkJustDrink.Api.Managers
                 ConfirmedDisclaimer = request.ConfirmedDisclaimer,
                 CurrentAppVersion = request.CurrentAppVersion
             };
-            await _userRepo.CreateUser(user);
+            await _usersRepo.CreateUser(user);
             return user.Id;
         }
 
         public async Task UpdateUser(string id, UpdateUserRequest request)
         {
-            var user = await _userRepo.GetUser(id);
+            var user = await _usersRepo.GetUser(id);
             if (user == null) {
                 throw new KeyNotFoundException();
             }
-            if (!request.Email.IsNullOrEmpty() && user.Email != request.Email && await _userRepo.UserEmailExists(request.Email)) {
+            if (!request.Email.IsNullOrEmpty() && user.Email != request.Email && await _usersRepo.UserEmailExists(request.Email)) {
                 throw new DuplicateEmailException();
             }
 
@@ -77,12 +77,12 @@ namespace DontThinkJustDrink.Api.Managers
             user.TCsVersionAgreedTo = request.TCsVersionAgreedTo;
             user.CurrentAppVersion = request.CurrentAppVersion;
 
-            await _userRepo.UpdateUser(id, user);
+            await _usersRepo.UpdateUser(id, user);
         }
 
         public async Task<string> SignUpUser(SignUpRequest request)
         {
-            if (await _userRepo.UserEmailExists(request.Email)) {
+            if (await _usersRepo.UserEmailExists(request.Email)) {
                 throw new DuplicateEmailException();
             }
 
@@ -108,15 +108,15 @@ namespace DontThinkJustDrink.Api.Managers
                 Hashed = _passwordHelper.Hash(request.Password)
             };
 
-            await _userRepo.Transact(async session =>
+            await _usersRepo.Transact(async session =>
             {
                 if (request.Id.IsNullOrEmpty()) {
-                    await _userRepo.CreateUser(user, session);
+                    await _usersRepo.CreateUser(user, session);
                 } else {
-                    await _userRepo.UpdateUser(request.Id, user, session);
+                    await _usersRepo.UpdateUser(request.Id, user, session);
                 }
 
-                await _userRepo.CreateCredentials(credentials, session);
+                await _usersRepo.CreateCredentials(credentials, session);
             });
 
             return user.Id;
@@ -124,7 +124,7 @@ namespace DontThinkJustDrink.Api.Managers
 
         public async Task<LoginResponse> Authenticate(string email, string password)
         {
-            var userCredentials = await _userRepo.GetUserCredentials(email);
+            var userCredentials = await _usersRepo.GetUserCredentials(email);
 
             if (userCredentials == null) {
                 var msg = $"User with email {email} could not be found.";
@@ -138,7 +138,7 @@ namespace DontThinkJustDrink.Api.Managers
                 return null;
             }
 
-            var user = await _userRepo.GetUser(userCredentials.UserId);
+            var user = await _usersRepo.GetUser(userCredentials.UserId);
 
             if (user == null) {
                 _logger.LogError($"User with id {userCredentials.UserId} could not be found");

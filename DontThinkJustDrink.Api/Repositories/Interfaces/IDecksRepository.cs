@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Repositories.Interfaces
 {
-    public interface IDeckRepository
+    public interface IDecksRepository
     {
         Task<List<DeckData>> GetList();
         Task<Deck> Get(string id);

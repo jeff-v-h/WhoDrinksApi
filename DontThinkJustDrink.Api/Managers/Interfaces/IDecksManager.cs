@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Managers.Interfaces
 {
-    public interface IDeckManager
+    public interface IDecksManager
     {
         Task<List<DeckData>> GetList();
         Task<Deck> Get(string id);

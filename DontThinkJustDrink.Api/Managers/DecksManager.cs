@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Managers
 {
-    public class DeckManager : IDeckManager
+    public class DecksManager : IDecksManager
     {
-        private readonly IDeckRepository _deckRepo;
+        private readonly IDecksRepository _decksRepo;
 
-        public DeckManager(IDeckRepository deckRepo)
+        public DecksManager(IDecksRepository decksRepo)
         {
-            _deckRepo = deckRepo;
+            _decksRepo = decksRepo;
         }
 
-        public async Task<List<DeckData>> GetList() => await _deckRepo.GetList();
+        public async Task<List<DeckData>> GetList() => await _decksRepo.GetList();
 
-        public async Task<Deck> Get(string id) => await _deckRepo.Get(id);
+        public async Task<Deck> Get(string id) => await _decksRepo.Get(id);
 
         public async Task<string> Create(CreateDeckRequest request)
         {
@@ -29,7 +29,7 @@ namespace DontThinkJustDrink.Api.Managers
                 Tags = request.Tags,
                 UserId = request.UserId
             };
-            await _deckRepo.Create(deck);
+            await _decksRepo.Create(deck);
             return deck.Id;
         }
     }

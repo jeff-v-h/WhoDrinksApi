@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Repositories.Interfaces
 {
-    public interface IUserRepository
+    public interface IUsersRepository
     {
         Task Transact(Action<IClientSessionHandle> action);
         Task<User> GetUser(string id);

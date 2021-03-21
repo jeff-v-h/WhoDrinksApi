@@ -16,11 +16,11 @@ namespace DontThinkJustDrink.Api.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly IUserManager _userManager;
+        private readonly IUsersManager _usersManager;
 
-        public UsersController(IUserManager userManager)
+        public UsersController(IUsersManager usersManager)
         {
-            _userManager = userManager;
+            _usersManager = usersManager;
         }
 
         [HttpGet]
@@ -32,8 +32,8 @@ namespace DontThinkJustDrink.Api.Controllers
             }
 
             var user = id != null
-                ? await _userManager.GetUser(id)
-                : await _userManager.GetUserByEmail(email);
+                ? await _usersManager.GetUser(id)
+                : await _usersManager.GetUserByEmail(email);
             return Ok(user);
         }
 
@@ -43,7 +43,7 @@ namespace DontThinkJustDrink.Api.Controllers
         {
             return Ok(new IdResponse
             {
-                Id = await _userManager.CreateUser(request)
+                Id = await _usersManager.CreateUser(request)
             });
         }
 
@@ -53,7 +53,7 @@ namespace DontThinkJustDrink.Api.Controllers
         public async Task<ActionResult> Update(string id, [FromBody] UpdateUserRequest request)
         {
             try {
-                await _userManager.UpdateUser(id, request);
+                await _usersManager.UpdateUser(id, request);
                 return Ok();
             } catch (DuplicateEmailException) {
                 return BadRequest(new ErrorDetails(400, $"User already exists for email: {request.Email}"));
@@ -70,7 +70,7 @@ namespace DontThinkJustDrink.Api.Controllers
             try {
                 return Ok(new SignUpResponse
                 {
-                    Id = await _userManager.SignUpUser(request)
+                    Id = await _usersManager.SignUpUser(request)
                 });
             } catch (DuplicateEmailException) {
                 return BadRequest(new ErrorDetails(400, $"User already exists for email: {request.Email}"));
@@ -83,7 +83,7 @@ namespace DontThinkJustDrink.Api.Controllers
         public async Task<ActionResult<LoginResponse>> Authenticate([FromBody] LoginRequest request)
         {
             try {
-                var response = await _userManager.Authenticate(request.Email, request.Password);
+                var response = await _usersManager.Authenticate(request.Email, request.Password);
                 return response == null ? BadRequest() : Ok(response);
             } catch (KeyNotFoundException) {
                 return BadRequest();

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Managers.Interfaces
 {
-    public interface IUserManager
+    public interface IUsersManager
     {
         Task<User> GetUser(string id);
         Task<User> GetUserByEmail(string email);
