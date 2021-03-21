@@ -24,9 +24,10 @@ namespace DontThinkJustDrink.Api.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(List<DeckData>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<Deck>> GetList()
+        public async Task<ActionResult<List<DeckData>>> GetDeckList()
         {
-            return Ok(await _decksManager.GetList());
+            var decks = await _decksManager.GetList();
+            return Ok(decks);
         }
 
         [HttpGet("{Id}")]
