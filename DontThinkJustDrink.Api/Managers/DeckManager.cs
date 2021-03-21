@@ -2,6 +2,7 @@
 using DontThinkJustDrink.Api.Models.Database;
 using DontThinkJustDrink.Api.Models.RequestModels;
 using DontThinkJustDrink.Api.Repositories.Interfaces;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Managers
@@ -15,6 +16,8 @@ namespace DontThinkJustDrink.Api.Managers
             _deckRepo = deckRepo;
         }
 
+        public async Task<List<DeckData>> GetList() => await _deckRepo.GetList();
+
         public async Task<Deck> Get(string id) => await _deckRepo.Get(id);
 
         public async Task<string> Create(CreateDeckRequest request)
@@ -23,7 +26,8 @@ namespace DontThinkJustDrink.Api.Managers
             {
                 Name = request.Name,
                 Cards = request.Cards,
-                Tags = request.Tags
+                Tags = request.Tags,
+                UserId = request.UserId
             };
             await _deckRepo.Create(deck);
             return deck.Id;
