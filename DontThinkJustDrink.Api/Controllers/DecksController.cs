@@ -4,6 +4,7 @@ using DontThinkJustDrink.Api.Models.RequestModels;
 using DontThinkJustDrink.Api.Models.ResponseModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -12,13 +13,20 @@ namespace DontThinkJustDrink.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class DeckController : ControllerBase
+    public class DecksController : ControllerBase
     {
         private readonly IDeckManager _deckManager;
 
-        public DeckController(IDeckManager deckManager)
+        public DecksController(IDeckManager deckManager)
         {
             _deckManager = deckManager;
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(List<DeckData>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<Deck>> GetList()
+        {
+            return Ok(await _deckManager.GetList());
         }
 
         [HttpGet("{Id}")]

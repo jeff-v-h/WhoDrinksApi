@@ -14,11 +14,11 @@ namespace DontThinkJustDrink.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly IUserManager _userManager;
 
-        public UserController(IUserManager userManager)
+        public UsersController(IUserManager userManager)
         {
             _userManager = userManager;
         }

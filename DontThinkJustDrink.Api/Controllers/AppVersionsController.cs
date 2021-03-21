@@ -11,12 +11,12 @@ namespace DontThinkJustDrink.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class AppVersionController : ControllerBase
+    public class AppVersionsController : ControllerBase
     {
         private readonly IAppVersionManager _appVersionManager;
-        private readonly ILogger<AppVersionController> _logger;
+        private readonly ILogger<AppVersionsController> _logger;
 
-        public AppVersionController(IAppVersionManager appVersionManager, ILogger<AppVersionController> logger)
+        public AppVersionsController(IAppVersionManager appVersionManager, ILogger<AppVersionsController> logger)
         {
             _appVersionManager = appVersionManager;
             _logger = logger;
