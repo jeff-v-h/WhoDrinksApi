@@ -1,5 +1,5 @@
 ﻿using DontThinkJustDrink.Api.Data.Interfaces;
-using DontThinkJustDrink.Api.Models;
+using DontThinkJustDrink.Api.Models.Database;
 using DontThinkJustDrink.Api.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UsersRepository : IUsersRepository
     {
         private readonly IMainAppContext _context;
-        private readonly ILogger<UserRepository> _logger;
+        private readonly ILogger<UsersRepository> _logger;
 
-        public UserRepository(IMainAppContext context, ILogger<UserRepository> logger)
+        public UsersRepository(IMainAppContext context, ILogger<UsersRepository> logger)
         {
             _context = context;
             _logger = logger;

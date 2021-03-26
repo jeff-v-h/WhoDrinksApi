@@ -1,5 +1,5 @@
 ﻿using DontThinkJustDrink.Api.Data.Interfaces;
-using DontThinkJustDrink.Api.Models;
+using DontThinkJustDrink.Api.Models.Database;
 using DontThinkJustDrink.Api.Settings.Interfaces;
 using MongoDB.Driver;
 using System.Threading.Tasks;
@@ -12,6 +12,7 @@ namespace DontThinkJustDrink.Api.Data
         public IMongoCollection<UserFeedback> UsersFeedback { get; }
         public IMongoCollection<User> Users { get; }
         public IMongoCollection<UserCredentials> UsersCredentials { get; }
+        public IMongoCollection<Deck> Decks { get; }
         private MongoClient _mongoClient { get; }
 
         public MainAppContext(IMainAppDatabaseSettings settings)
@@ -23,6 +24,7 @@ namespace DontThinkJustDrink.Api.Data
             UsersFeedback = database.GetCollection<UserFeedback>(settings.UsersFeedbackCollectionName);
             Users = database.GetCollection<User>(settings.UsersCollectionName);
             UsersCredentials = database.GetCollection<UserCredentials>(settings.UserCredentialsCollectionName);
+            Decks = database.GetCollection<Deck>(settings.DecksCollectionName);
         }
 
         public async Task<IClientSessionHandle> StartSessionAsync() => await _mongoClient.StartSessionAsync();

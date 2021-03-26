@@ -1,22 +1,22 @@
 ﻿using DontThinkJustDrink.Api.Managers.Interfaces;
-using DontThinkJustDrink.Api.Models;
+using DontThinkJustDrink.Api.Models.Database;
 using DontThinkJustDrink.Api.Repositories.Interfaces;
 using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Managers
 {
-    public class AppVersionManager : IAppVersionManager
+    public class AppVersionManager : IAppVersionsManager
     {
-        private readonly IAppVersionRepository _appVersionRepository;
+        private readonly IAppVersionsRepository _appVersionsRepository;
 
-        public AppVersionManager(IAppVersionRepository appVersionRepository)
+        public AppVersionManager(IAppVersionsRepository appVersionsRepository)
         {
-            _appVersionRepository = appVersionRepository;
+            _appVersionsRepository = appVersionsRepository;
         }
 
         public Task<AppVersion> GetDetails(string version)
         {
-            return _appVersionRepository.GetDetails(version);
+            return _appVersionsRepository.GetDetails(version);
         }
     }
 }

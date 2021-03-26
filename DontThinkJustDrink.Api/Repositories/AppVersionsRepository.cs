@@ -1,16 +1,16 @@
 ﻿using DontThinkJustDrink.Api.Data.Interfaces;
-using DontThinkJustDrink.Api.Models;
+using DontThinkJustDrink.Api.Models.Database;
 using DontThinkJustDrink.Api.Repositories.Interfaces;
 using MongoDB.Driver;
 using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Repositories
 {
-    public class AppVersionRepository : IAppVersionRepository
+    public class AppVersionsRepository : IAppVersionsRepository
     {
         private readonly IMainAppContext _context;
 
-        public AppVersionRepository(IMainAppContext context)
+        public AppVersionsRepository(IMainAppContext context)
         {
             _context = context;
         }

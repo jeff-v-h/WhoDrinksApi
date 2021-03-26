@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace DontThinkJustDrink.Api.Models
+namespace DontThinkJustDrink.Api.Models.ResponseModels
 {
     public class ErrorDetails
     {

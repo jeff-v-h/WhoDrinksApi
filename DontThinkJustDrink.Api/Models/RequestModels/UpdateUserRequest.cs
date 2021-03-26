@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DontThinkJustDrink.Api.Models.Database;
+using System.ComponentModel.DataAnnotations;
 
 namespace DontThinkJustDrink.Api.Models.RequestModels
 {

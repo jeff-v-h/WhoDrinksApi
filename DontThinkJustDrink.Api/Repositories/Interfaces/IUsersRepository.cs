@@ -1,11 +1,11 @@
-﻿using DontThinkJustDrink.Api.Models;
+﻿using DontThinkJustDrink.Api.Models.Database;
 using MongoDB.Driver;
 using System;
 using System.Threading.Tasks;
 
 namespace DontThinkJustDrink.Api.Repositories.Interfaces
 {
-    public interface IUserRepository
+    public interface IUsersRepository
     {
         Task Transact(Action<IClientSessionHandle> action);
         Task<User> GetUser(string id);
