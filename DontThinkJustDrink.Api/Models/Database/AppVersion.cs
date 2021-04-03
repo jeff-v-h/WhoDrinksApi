@@ -18,8 +18,7 @@ namespace DontThinkJustDrink.Api.Models.Database
         // FE or BE prefix = frontend or backend version
         public string AssociatedPrivacyPolicyVersion { get; set; }
         public string AssociatedTCsVersion { get; set; }
-        public bool ForceNewTCsAgreement { get; set; }
-        public bool ForceNewPrivacyPolicyAgreement { get; set; }
+        public bool ForceNewTCsAgreement { get; set; } // Also use for Privacy Policy since the T&Cs agreement includes agreement to it
         // These should only be used by frontend if forcing new agreements since frontend
         // should already have the originals on load to prevent need for network connection
         public string TermsAndConditions { get; set; }
