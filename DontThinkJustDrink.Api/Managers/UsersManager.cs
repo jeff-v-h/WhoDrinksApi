@@ -7,6 +7,7 @@ using DontThinkJustDrink.Api.Models.RequestModels;
 using DontThinkJustDrink.Api.Models.ResponseModels;
 using DontThinkJustDrink.Api.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -108,18 +109,22 @@ namespace DontThinkJustDrink.Api.Managers
                 Hashed = _passwordHelper.Hash(request.Password)
             };
 
-            await _usersRepo.Transact(async session =>
-            {
-                if (request.Id.IsNullOrEmpty()) {
-                    await _usersRepo.CreateUser(user, session);
-                } else {
-                    await _usersRepo.UpdateUser(request.Id, user, session);
-                }
-
-                await _usersRepo.CreateCredentials(credentials, session);
-            });
+            // Use Transact if using replica sets for db
+            await SaveUserAndCredentials(request.Id, user, credentials);
+            //await _usersRepo.Transact(async session => await SaveUserAndCredentials(request.Id, user, credentials, session));
 
             return user.Id;
+        }
+
+        private async Task SaveUserAndCredentials(string id, User user, UserCredentials credentials, IClientSessionHandle session = null)
+        {
+            if (id.IsNullOrEmpty()) {
+                await _usersRepo.CreateUser(user, session);
+            } else {
+                await _usersRepo.UpdateUser(id, user, session);
+            }
+
+            await _usersRepo.CreateCredentials(credentials, session);
         }
 
         public async Task<LoginResponse> Authenticate(string email, string password)
