@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using DontThinkJustDrink.Api.Data;
 using DontThinkJustDrink.Api.Data.Interfaces;
 using DontThinkJustDrink.Api.Helpers;
@@ -31,6 +32,18 @@ namespace DontThinkJustDrink.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+            services.AddMemoryCache();
+
+            services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateLimiting"));
+            services.Configure<IpRateLimitPolicies>(Configuration.GetSection("IpRateLimitPolicies"));
+
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+
+            services.AddHttpContextAccessor();
+
             services.AddCors();
             services.AddControllers();
 
@@ -85,6 +98,8 @@ namespace DontThinkJustDrink.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DontThinkJustDrink API v1"));
             }
+
+            app.UseIpRateLimiting();
 
             app.UseMiddleware<ExceptionMiddleware>();
 #if !DEBUG
