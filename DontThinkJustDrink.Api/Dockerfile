@@ -20,3 +20,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "DontThinkJustDrink.Api.dll"]
+
+ENV ASPNETCORE_URLS http://+:5000
+EXPOSE 5000

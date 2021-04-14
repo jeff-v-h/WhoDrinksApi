@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  mymvcweb:
+    build:
+      context: ./DontThinkJustDrink.Api
+      dockerfile: Dockerfile
+    expose:
+      - "5000"
+    restart: always
+  reverseproxy:
+    build:
+      context: ./reverseproxy
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    restart: always
+    links :
+      - DontThinkJustDrink.Api
