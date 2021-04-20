@@ -49,7 +49,7 @@ namespace DontThinkJustDrink.Api.Middlewares
                 
                 var isAuthenticated = await Task.Run(() => _passwordHelper.CheckBasic(username, password));
                 if (!isAuthenticated) {
-                    AuthenticateResult.Fail("Invalid Username or Password");
+                    return AuthenticateResult.Fail("Invalid Username or Password");
                 }
             } catch {
                 return AuthenticateResult.Fail("Invalid Authorization Header");
