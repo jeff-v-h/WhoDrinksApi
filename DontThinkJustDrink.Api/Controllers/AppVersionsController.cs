@@ -22,6 +22,17 @@ namespace DontThinkJustDrink.Api.Controllers
             _logger = logger;
         }
 
+        [HttpGet("test/{text}")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(AppVersion), (int)HttpStatusCode.OK)]
+        public ActionResult<TestResponse> TestEndpoint(string text)
+        {
+            return Ok(new TestResponse
+            {
+                Text = text
+            });
+        }
+
         [HttpGet("{version}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(AppVersion), (int)HttpStatusCode.OK)]
@@ -37,5 +48,10 @@ namespace DontThinkJustDrink.Api.Controllers
 
             return Ok(versionDetails);
         }
+    }
+
+    public class TestResponse
+    {
+        public string Text { get; set; }
     }
 }
