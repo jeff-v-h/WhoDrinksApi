@@ -38,6 +38,7 @@ Use this method to be able to add break points for debugging.
 1. Open Solution with Visual Studio.
 2. Target Docker and click Play button.
 3. A new browser should open up to swagger page with path /swagger/index.html.
+4. For API requests, target http://localhost:5000 or https://localhost:5001
 
 ##### Method 2: Docker Compose
 
