@@ -1,6 +1,6 @@
-# Don't Think Just Drink API
+# Who Drinks API
 
-API for the Don't Think Just Drink mobile application.
+API for the Who Drinks mobile application.
 
 ## Getting started
 
@@ -42,10 +42,10 @@ Use this method to be able to add break points for debugging.
 
 ##### Method 2: Docker Compose
 
-1. You may need to go to the reverseproxy/nginx.conf file and ensure the upstream app_servers block targets dontthinkjustdrinkapi:5000
+1. You may need to go to the reverseproxy/nginx.conf file and ensure the upstream app_servers block targets whodrinksapi:5000
 ```
 upstream app_servers {
-    server dontthinkjustdrinkapi:5000;
+    server whodrinksapi:5000;
 }
 ```
 2. Navigate to root directory in command line and run `docker-compose build`
@@ -93,12 +93,12 @@ upstream app_servers {
 #### New Release Example
 
 1. Get password and login: `aws ecr get-login-password | docker login --username AWS --password-stdin 209196940283.dkr.ecr.ap-southeast-2.amazonaws.com`
-2. Create repository: `aws ecr create-repository --repository-name dontthinkjustdrinkapi --region ap-southeast-2`
-3. Tag docker image `docker tag dontthinkjustdrinkapi_dontthinkjustdrinkapi 209196940283.dkr.ecr.ap-southeast-2.amazonaws.com/dontthinkjustdrinkapi`
-4. Push up to ecr: `docker push 209196940283.dkr.ecr.ap-southeast-2.amazonaws.com/dontthinkjustdrinkapi`
-5. Create repository for nginx: `aws ecr create-repository --repository-name dontthinkjustdrinkapi-reverseproxy --region ap-southeast-2`
-6. Tag docker image for nginx: `docker tag dontthinkjustdrinkapi_reverseproxy 209196940283.dkr.ecr.ap-southeast-2.amazonaws.com/dontthinkjustdrinkapi-reverseproxy`
-7. Push up nginx tag to ecr: `docker push 209196940283.dkr.ecr.ap-southeast-2.amazonaws.com/dontthinkjustdrinkapi-reverseproxy`
+2. Create repository: `aws ecr create-repository --repository-name whodrinksapi --region ap-southeast-2`
+3. Tag docker image `docker tag whodrinksapi_whodrinksapi 209196940283.dkr.ecr.ap-southeast-2.amazonaws.com/whodrinksapi`
+4. Push up to ecr: `docker push 209196940283.dkr.ecr.ap-southeast-2.amazonaws.com/whodrinksapi`
+5. Create repository for nginx: `aws ecr create-repository --repository-name whodrinksapi-reverseproxy --region ap-southeast-2`
+6. Tag docker image for nginx: `docker tag whodrinksapi_reverseproxy 209196940283.dkr.ecr.ap-southeast-2.amazonaws.com/whodrinksapi-reverseproxy`
+7. Push up nginx tag to ecr: `docker push 209196940283.dkr.ecr.ap-southeast-2.amazonaws.com/whodrinksapi-reverseproxy`
 
 ## Authors
 

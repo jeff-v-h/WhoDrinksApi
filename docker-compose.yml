@@ -1,8 +1,8 @@
 version: '3.8'
 services:
-  dontthinkjustdrinkapi:
+  whodrinksapi:
     build:
-      context: ./DontThinkJustDrink.Api
+      context: ./WhoDrinks.Api
       dockerfile: Dockerfile
     expose:
       - "5000"
@@ -15,4 +15,4 @@ services:
       - "80:80"
     restart: always
     links :
-      - dontthinkjustdrinkapi
+      - whodrinksapi
