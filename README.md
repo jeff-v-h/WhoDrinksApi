@@ -66,12 +66,12 @@ The following steps have already been completed and can be skipped. This has bee
 
 1. Setup login configuration on aws for an account able to write to ecr
 2. Follow steps 1-5 below in 'New Release'.
-3. Configure Security Group allowing at least http and https
-4. Create Task Definition which uses the created docker images (latest version)
-5. Create cluster
-6. Create ALB which also includes same security group as cluster
-7. Inthe created cluster create a service that targets the same vpc, subnets and the created ALB. For the container to load, select the nginx container.
-8. Login to the DB Cluster/s and ensure ALB is allowed access.
+3. Create repositories for each image to be pushed up and follow steps 6 - 8 in 'New Release'.
+4. Crate security groups
+5. Create Task Definition which uses the created docker images (latest version)
+6. Create ECS cluster.
+7. Having new ECS Experience switch enabled, it is now possible to create load balancer and target groups on ECS servcie creation as well. For the container to load, select the nginx container.
+8. Login to the DB Cluster/s and ensure ALB is allowed access using the DNS name (A Record).
 
 ### New Release
 
@@ -93,7 +93,7 @@ upstream app_servers {
 #### New Release Example
 
 1. Get password and login: `aws ecr get-login-password | docker login --username AWS --password-stdin 209196940283.dkr.ecr.ap-southeast-2.amazonaws.com`
-2. Create repository: `aws ecr create-repository --repository-name whodrinksapi --region ap-southeast-2`
+2. Create repository if needed: `aws ecr create-repository --repository-name whodrinksapi --region ap-southeast-2`
 3. Tag docker image `docker tag whodrinksapi_whodrinksapi 209196940283.dkr.ecr.ap-southeast-2.amazonaws.com/whodrinksapi`
 4. Push up to ecr: `docker push 209196940283.dkr.ecr.ap-southeast-2.amazonaws.com/whodrinksapi`
 5. Create repository for nginx: `aws ecr create-repository --repository-name whodrinksapi-reverseproxy --region ap-southeast-2`
